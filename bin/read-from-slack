@@ -10,7 +10,6 @@ let one_day="60*60*24"
 timestamp=$(date +"%s")
 let past_24_hrs="$timestamp - $one_day"
 
-echo "Reading channel history from slack"
 curl https://slack.com/api/conversations.history \
     --header "Authorization: Bearer $SLACK_TOKEN" \
     --form-string channel="$SLACK_CHANNEL" \
