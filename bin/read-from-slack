@@ -6,7 +6,12 @@ set -euo pipefail
 : "${SLACK_TOKEN:?The SLACK_TOKEN environment variable is required.}"
 : "${SLACK_CHANNEL:?The SLACK_CHANNEL environment variable is required.}"
 
+let one_day="60*60*24"
+timestamp=$(date +"%s")
+let past_24_hrs="$timestamp - $one_day"
+
 echo "Reading channel history from slack"
 curl https://slack.com/api/conversations.history \
     --header "Authorization: Bearer $SLACK_TOKEN" \
     --form-string channel="$SLACK_CHANNEL" \
+    --form-string oldest="$past_24_hrs"
