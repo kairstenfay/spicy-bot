@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Code modified from https://github.com/nextstrain/ncov-ingest/blob/master/bin/notify-slack
+set -euo pipefail
+
+: "${SLACK_TOKEN:?The SLACK_TOKEN environment variable is required.}"
+: "${SLACK_CHANNEL:?The SLACK_CHANNEL environment variable is required.}"
+
+echo "Reading channel history from slack"
+curl https://slack.com/api/conversations.history \
+    --header "Authorization: Bearer $SLACK_TOKEN" \
+    --form-string channel="$SLACK_CHANNEL" \

@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Code modified from https://github.com/nextstrain/ncov-ingest/blob/master/bin/notify-slack
+set -euo pipefail
+
+: "${SLACK_TOKEN:?The SLACK_TOKEN environment variable is required.}"
+: "${SLACK_CHANNEL:?The SLACK_CHANNEL environment variable is required.}"
+
+text="${1:?Some message text is required.}"
+
+echo "Posting Slack message: $text"
+curl https://slack.com/api/chat.postMessage \
+    --header "Authorization: Bearer $SLACK_TOKEN" \
+    --form-string channel="$SLACK_CHANNEL" \
+    --form-string text="$text" \
+    --fail --silent --show-error \
+    --http1.1 \
+    --include
