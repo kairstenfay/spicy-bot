@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+set -euo pipefail
+
+# Change to the top-level of the repo checkout
+cd "$(dirname "$0")/.."
+
+datadir="$(mktemp -d -t spicy-bot-XXXXXX)"
+# Always leave and delete this temporary directory regardless of exit code
+trap "rm -rf '$datadir'" EXIT
+
+./bin/rate-spicy-takes <(./bin/read-from-slack) > "$datadir"/ratings.txt
+
+cat "$datadir"/ratings.txt
+
+text="In the past 24 hours, $(cat "$datadir"/ratings.txt)"
+
+./bin/post-to-slack "$text"
